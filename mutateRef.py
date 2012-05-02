@@ -15,7 +15,7 @@ import contigs
 from contigs import *
 
 __author__ = "alistair ward"
-__version__ = "version 0.01"
+__version__ = "version 0.02"
 __date__ = "april 2012"
 
 def main():
@@ -197,7 +197,7 @@ def main():
               # If the next allele position is not in the line of sequence, but the start
               # of the leading flank is, add the required sequence to the contig.
               elif (alleleInThisSequence == False) and (flankInSequence == True):
-                altContigs.sequence[variantPosition] += line[(max(0, (variantPosition - var.flankLength))):len(line)]
+                altContigs.sequence[variantPosition] += line[(max(0, (variantPosition - var.flankLength - sequenceStart))):len(line)]
 
                 # Write to the output sequence.
                 altContigs.writeToOutputSequence(var, ref, currentRefID, variantPosition, variantID, line, sequenceStart)
@@ -224,7 +224,7 @@ def main():
               # up to the variant position to the contig and the output sequence and then
               # determine the alleles.
               elif (alleleInThisSequence == True):
-                start = max(0, (variantPosition - var.flankLength))
+                start = max(0, (variantPosition - var.flankLength - sequenceStart))
                 end   = min(len(line), (variantPosition - sequenceStart))
                 altContigs.sequence[variantPosition] += line[start:end]
 
