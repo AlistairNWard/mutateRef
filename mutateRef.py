@@ -15,7 +15,7 @@ import contigs
 from contigs import *
 
 __author__ = "alistair ward"
-__version__ = "version 0.02"
+__version__ = "version 0.03"
 __date__ = "april 2012"
 
 def main():

@@ -109,7 +109,7 @@ class contigs:
     if var.variantType[refID][position][0] == "ins": variantLength = 1
     else: variantLength = var.variantType[refID][position][1]
     start = position - sequenceStart + variantLength      
-    ref.outputSequence += sequence[start:len(sequence)]
+    ref.outputSequence += sequence[max(0, start):len(sequence)]
 
 # For contigs requiring more trailing flank, add the flank and check for
 # completion.
