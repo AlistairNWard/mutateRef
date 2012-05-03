@@ -96,9 +96,11 @@ class contigs:
 # var.variantType object.
   def completeContig(self, var, ref, refID, position):
 
-    # Define the contig name.
-    self.name[position] = '>alternate_contig:' + ref.sequenceName[refID] + "_" + str(position + 1) + "_" + self.referenceAllele[position]
-    self.name[position] += "_" + self.alternateAllele[position] + ' dna:alternate_contig'
+    # Define the contig name.  The name should have the following form:
+    # >alternate_contig:<refID>_<genome coord of start>_<genome coord of variant allele>_<ref allele>_<alt allele>
+    coord = position - var.flankLength + 1;
+    self.name[position] = '>alternate_contig:' + ref.sequenceName[refID] + "_" + str(coord) + "_" + str(position + 1) 
+    self.name[position] += "_" + self.referenceAllele[position] + "_" + self.alternateAllele[position] + ' dna:alternate_contig'
     print(self.name[position], file=ref.contigFilehandle)
     while len(self.sequence[position]) > ref.sequenceLength:
       print(self.sequence[position][0:ref.sequenceLength], file=ref.contigFilehandle)
