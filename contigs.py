@@ -100,7 +100,15 @@ class contigs:
     self.name[position] = '>alternate_contig:' + ref.sequenceName[refID] + "_" + str(position + 1) + "_" + self.referenceAllele[position]
     self.name[position] += "_" + self.alternateAllele[position] + ' dna:alternate_contig'
     print(self.name[position], file=ref.contigFilehandle)
-    print(self.sequence[position], file=ref.contigFilehandle)
+    while len(self.sequence[position]) > ref.sequenceLength:
+      print(self.sequence[position][0:ref.sequenceLength], file=ref.contigFilehandle)
+      self.sequence[position] = self.sequence[position][ref.sequenceLength:len(self.sequence[position])]
+
+    # If there is still some sequence left to be output, output it now.
+    if (len(self.sequence[position]) > 0):
+      print(self.sequence[position], file=ref.contigFilehandle)
+      self.sequence[position] = ""
+
     self.completed[position] = True
 
 # If the last variant was reached, output the remainder of the line of input
