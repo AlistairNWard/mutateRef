@@ -98,9 +98,16 @@ class contigs:
 
     # Define the contig name.  The name should have the following form:
     # >alternate_contig:<refID>_<genome coord of start>_<genome coord of variant allele>_<ref allele>_<alt allele>
-    coord = position - var.flankLength + 1;
+    coord = max(1, position - var.flankLength + 1)
+
+    # Determine the CIGAR operation for the variant.
+    if var.variantType[refID][position][0] == "snp":   cigar = str(var.variantType[refID][position][1]) + "M"
+    elif var.variantType[refID][position][0] == "mnp": cigar = str(var.variantType[refID][position][1]) + "M"
+    elif var.variantType[refID][position][0] == "ins": cigar = str(var.variantType[refID][position][1] - 2) + "I"
+    elif var.variantType[refID][position][0] == "del": cigar = str(var.variantType[refID][position][1] - 1) + "D"
+
     self.name[position] = '>alternate_contig:' + ref.sequenceName[refID] + "_" + str(coord) + "_" + str(position + 1) 
-    self.name[position] += "_" + self.referenceAllele[position] + "_" + self.alternateAllele[position] + ' dna:alternate_contig'
+    self.name[position] += "_" + cigar + "_" + self.referenceAllele[position] + "_" + self.alternateAllele[position] + ' dna:alternate_contig'
     print(self.name[position], file=ref.contigFilehandle)
     while len(self.sequence[position]) > ref.sequenceLength:
       print(self.sequence[position][0:ref.sequenceLength], file=ref.contigFilehandle)
